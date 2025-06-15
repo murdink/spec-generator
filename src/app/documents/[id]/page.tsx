@@ -19,7 +19,6 @@ export default function DocumentPage() {
     await sendMessage.mutateAsync({
       conversationId: document.conversation.id,
       text: message,
-      sender: "user",
     });
 
     setMessage("");

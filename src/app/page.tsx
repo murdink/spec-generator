@@ -37,7 +37,6 @@ export default function Home() {
     await sendMessage.mutateAsync({
       conversationId: document.conversation.id,
       text: message,
-      sender: "user",
     });
 
     // In a real application, you would get the updated content from the LLM
