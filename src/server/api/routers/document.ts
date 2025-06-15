@@ -10,6 +10,9 @@ export const documentRouter = createTRPCRouter({
         data: {
           title: input.title,
           content: input.content,
+          conversation: {
+            create: {},
+          },
         },
       });
     }),
@@ -19,6 +22,13 @@ export const documentRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return ctx.db.document.findUnique({
         where: { id: input.id },
+        include: {
+          conversation: {
+            include: {
+              messages: true,
+            },
+          },
+        },
       });
     }),
 
@@ -27,4 +37,18 @@ export const documentRouter = createTRPCRouter({
       orderBy: { createdAt: "desc" },
     });
   }),
+
+  update: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        content: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.document.update({
+        where: { id: input.id },
+        data: { content: input.content },
+      });
+    }),
 });
