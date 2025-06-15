@@ -25,13 +25,23 @@ export class ConversationUseCase {
       const llmResponse = await this.llmService.getResponse(
         conversation.messages,
       );
-      await this.db.message.create({
-        data: {
-          conversationId,
-          text: llmResponse,
-          sender: "llm",
-        },
-      });
+
+      if (llmResponse.clarifying_question) {
+        await this.db.message.create({
+          data: {
+            conversationId,
+            text: llmResponse.clarifying_question,
+            sender: "llm",
+          },
+        });
+      }
+
+      if (llmResponse.updated_spec_document) {
+        await this.db.document.update({
+          where: { id: conversation.documentId },
+          data: { content: llmResponse.updated_spec_document },
+        });
+      }
     }
   }
 }

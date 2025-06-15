@@ -43,10 +43,8 @@ export default function Home() {
       text: message,
     });
 
-    // In a real application, you would get the updated content from the LLM
-    // and update the document state. For now, we'll just append the message.
-    const newContent = `${documentContent}\n\n**User:** ${message}`;
-    setDocumentContent(newContent);
+    // The refetch will automatically update the UI with the new message
+    // and the updated document content if it was changed by the LLM.
     setMessage("");
     refetch();
   };
@@ -90,7 +88,7 @@ export default function Home() {
       </div>
       <div className="col-span-1 flex flex-col bg-gray-100 rounded-lg p-4">
         <div className="flex-grow overflow-y-auto mb-4">
-          <pre className="whitespace-pre-wrap">{documentContent}</pre>
+          <pre className="whitespace-pre-wrap">{document?.content ?? documentContent}</pre>
         </div>
         <button
           className="bg-green-500 text-white px-4 py-2 rounded-md self-end"
