@@ -15,7 +15,11 @@ export default function Home() {
   });
 
   const updateDocument = api.document.update.useMutation();
-  const sendMessage = api.conversation.sendMessage.useMutation();
+  const sendMessage = api.conversation.sendMessage.useMutation({
+    onError: (error) => {
+      alert(`An error occurred: ${error.message}`);
+    },
+  });
 
   const { data: document, refetch } = api.document.getById.useQuery(
     { id: documentId! },
@@ -23,13 +27,13 @@ export default function Home() {
   );
 
   useEffect(() => {
-    if (!documentId) {
+    if (!documentId && !createDocument.isPending) {
       createDocument.mutate({
         title: "New Document",
-        content: documentContent,
+        content: "# Your Spec\n\nStart chatting to generate your document.",
       });
     }
-  }, [documentId, createDocument, documentContent]);
+  }, [documentId, createDocument]);
 
   const handleSendMessage = async () => {
     if (!documentId || !document?.conversation) return;

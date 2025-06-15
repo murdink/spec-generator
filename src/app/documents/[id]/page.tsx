@@ -9,7 +9,11 @@ export default function DocumentPage() {
   const id = Number(params.id);
 
   const { data: document, isLoading, refetch } = api.document.getById.useQuery({ id });
-  const sendMessage = api.conversation.sendMessage.useMutation();
+  const sendMessage = api.conversation.sendMessage.useMutation({
+    onError: (error) => {
+      alert(`An error occurred: ${error.message}`);
+    },
+  });
 
   const [message, setMessage] = useState("");
 

@@ -1,5 +1,5 @@
-import { OpenAiAdapter } from "@/server/adapters/open-ai-adapter";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createLlmService } from "@/server/domain/factories/llm-service-factory";
 import { ConversationUseCase } from "@/server/domain/use-cases/conversation-use-case";
 import { z } from "zod";
 
@@ -13,7 +13,7 @@ export const conversationRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const useCase = new ConversationUseCase(
-        new OpenAiAdapter(),
+        createLlmService(),
         ctx.db,
       );
       await useCase.sendMessage(input.conversationId, input.text);
