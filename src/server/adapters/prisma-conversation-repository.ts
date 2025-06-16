@@ -4,38 +4,38 @@ import type { Message } from "../domain/entities/message";
 import type { ConversationRepository } from "../domain/ports/conversation-repository";
 
 export class PrismaConversationRepository implements ConversationRepository {
-	constructor(private readonly db: PrismaClient) {}
+  constructor(private readonly db: PrismaClient) {}
 
-	public async findConversationById(
-		conversationId: number,
-	): Promise<Conversation | null> {
-		const conversation = await this.db.conversation.findUnique({
-			where: { id: conversationId },
-			include: { messages: true },
-		});
+  public async findConversationById(
+    conversationId: number,
+  ): Promise<Conversation | null> {
+    const conversation = await this.db.conversation.findUnique({
+      where: { id: conversationId },
+      include: { messages: true },
+    });
 
-		if (!conversation) {
-			return null;
-		}
+    if (!conversation) {
+      return null;
+    }
 
-		return conversation;
-	}
+    return conversation as Conversation;
+  }
 
-	public async addMessage(
-		message: Omit<Message, "id" | "createdAt">,
-	): Promise<void> {
-		await this.db.message.create({
-			data: message,
-		});
-	}
+  public async addMessage(
+    message: Omit<Message, "id" | "createdAt">,
+  ): Promise<void> {
+    await this.db.message.create({
+      data: message,
+    });
+  }
 
-	public async updateDocument(
-		documentId: number,
-		content: string,
-	): Promise<void> {
-		await this.db.document.update({
-			where: { id: documentId },
-			data: { content },
-		});
-	}
+  public async updateDocument(
+    documentId: number,
+    content: string,
+  ): Promise<void> {
+    await this.db.document.update({
+      where: { id: documentId },
+      data: { content },
+    });
+  }
 }

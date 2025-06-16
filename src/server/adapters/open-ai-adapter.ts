@@ -1,6 +1,6 @@
-import { type Message } from "@prisma/client";
+import type { Message } from "@prisma/client";
 import OpenAI from "openai";
-import { type LlmResponse, type LlmService } from "../domain/ports/llm-service";
+import type { LlmResponse, LlmService } from "../domain/ports/llm-service";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -22,7 +22,8 @@ export class OpenAiAdapter implements LlmService {
       messages: [
         { role: "system", content: systemPrompt },
         ...messages.map((msg) => {
-          const role: "user" | "assistant" = msg.sender === "user" ? "user" : "assistant";
+          const role: "user" | "assistant" =
+            msg.sender === "user" ? "user" : "assistant";
           return {
             role,
             content: msg.text,
@@ -41,7 +42,10 @@ export class OpenAiAdapter implements LlmService {
     try {
       return JSON.parse(response) as LlmResponse;
     } catch (error) {
-      return { clarifying_question: "I'm sorry, I had trouble understanding the response." };
+      return {
+        clarifying_question:
+          "I'm sorry, I had trouble understanding the response.",
+      };
     }
   }
 }

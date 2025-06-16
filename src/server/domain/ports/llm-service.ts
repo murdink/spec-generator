@@ -1,4 +1,4 @@
-import { type Message } from "@prisma/client";
+import type { Message } from "@prisma/client";
 
 export type LlmResponse = {
   clarifying_question?: string;

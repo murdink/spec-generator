@@ -1,5 +1,5 @@
-import { type ConversationRepository } from "../ports/conversation-repository";
-import { type LlmService } from "../ports/llm-service";
+import type { ConversationRepository } from "../ports/conversation-repository";
+import type { LlmService } from "../ports/llm-service";
 
 export class ConversationUseCase {
   constructor(

@@ -43,7 +43,7 @@ export const documentRouter = createTRPCRouter({
       z.object({
         id: z.number(),
         content: z.string().min(1),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       return ctx.db.document.update({
