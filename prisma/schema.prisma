@@ -33,7 +33,11 @@ model Message {
     conversationId  Int
     conversation    Conversation @relation(fields: [conversationId], references: [id])
     text            String       @db.Text
-    sender          String       // "user" or "llm"
+    sender          SenderRole
     createdAt       DateTime     @default(now())
 }
 
+enum SenderRole {
+    user
+    llm
+}

@@ -1,13 +1,12 @@
-import type { PrismaClient } from "@prisma/client";
+import type { PrismaClient, SenderRole } from "@prisma/client";
 import type { Conversation } from "../domain/entities/conversation";
-import type { Message } from "../domain/entities/message";
 import type { ConversationRepository } from "../domain/ports/conversation-repository";
 
 export class PrismaConversationRepository implements ConversationRepository {
   constructor(private readonly db: PrismaClient) {}
 
   public async findConversationById(
-    conversationId: number,
+    conversationId: number
   ): Promise<Conversation | null> {
     const conversation = await this.db.conversation.findUnique({
       where: { id: conversationId },
@@ -18,20 +17,35 @@ export class PrismaConversationRepository implements ConversationRepository {
       return null;
     }
 
-    return conversation as Conversation;
+    return {
+      id: conversation.id,
+      documentId: conversation.documentId,
+      messages: conversation.messages.map((message) => ({
+        id: message.id,
+        conversationId: message.conversationId,
+        text: message.text,
+        sender: message.sender,
+        createdAt: message.createdAt,
+      })),
+    };
   }
 
-  public async addMessage(
-    message: Omit<Message, "id" | "createdAt">,
-  ): Promise<void> {
+  public async addMessage(message: {
+    conversationId: number;
+    text: string;
+    sender: "user" | "llm";
+  }): Promise<void> {
     await this.db.message.create({
-      data: message,
+      data: {
+        ...message,
+        sender: message.sender as SenderRole,
+      },
     });
   }
 
   public async updateDocument(
     documentId: number,
-    content: string,
+    content: string
   ): Promise<void> {
     await this.db.document.update({
       where: { id: documentId },
