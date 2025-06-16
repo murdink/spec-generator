@@ -1,5 +1,8 @@
 import type { Message } from "@prisma/client";
-import type { LlmResponse, LlmService } from "../domain/ports/llm-service";
+import type {
+  LlmResponse,
+  LlmService,
+} from "../../../domain/ports/llm-service";
 
 export class FakeLlmAdapter implements LlmService {
   public async getResponse(messages: Message[]): Promise<LlmResponse> {

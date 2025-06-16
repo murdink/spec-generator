@@ -1,6 +1,6 @@
 import type { PrismaClient, SenderRole } from "@prisma/client";
-import type { Conversation } from "../domain/entities/conversation";
-import type { ConversationRepository } from "../domain/ports/conversation-repository";
+import type { Conversation } from "../../../domain/entities/conversation";
+import type { ConversationRepository } from "../../../domain/ports/conversation-repository";
 
 export class PrismaConversationRepository implements ConversationRepository {
   constructor(private readonly db: PrismaClient) {}

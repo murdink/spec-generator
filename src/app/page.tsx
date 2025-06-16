@@ -51,22 +51,24 @@ function DocumentEditor({ documentId }: { documentId: number }) {
     <main className="grid h-screen grid-cols-2 gap-8 p-8">
       <div className="col-span-1 flex flex-col rounded-lg bg-gray-100 p-4">
         <div className="mb-4 flex-grow overflow-y-auto">
-          {document?.conversation?.messages.map((msg) => (
-            <div
-              key={msg.id}
-              className={`mb-2 ${msg.sender === "user" ? "text-right" : ""}`}
-            >
-              <span
-                className={`inline-block rounded-lg p-2 ${
-                  msg.sender === "user"
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-300"
-                }`}
+          {document?.conversation?.messages.map(
+            (msg: { id: number; sender: string; text: string }) => (
+              <div
+                key={msg.id}
+                className={`mb-2 ${msg.sender === "user" ? "text-right" : ""}`}
               >
-                {msg.text}
-              </span>
-            </div>
-          ))}
+                <span
+                  className={`inline-block rounded-lg p-2 ${
+                    msg.sender === "user"
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-300"
+                  }`}
+                >
+                  {msg.text}
+                </span>
+              </div>
+            )
+          )}
         </div>
         <div className="flex">
           <input
@@ -106,7 +108,7 @@ function DocumentEditor({ documentId }: { documentId: number }) {
 export default function Home() {
   const [documentId, setDocumentId] = useState<number | null>(null);
   const createDocument = api.document.create.useMutation({
-    onSuccess: (data) => {
+    onSuccess: (data: { id: number }) => {
       setDocumentId(data.id);
     },
   });

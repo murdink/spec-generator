@@ -1,6 +1,9 @@
 import type { Message } from "@prisma/client";
 import OpenAI from "openai";
-import type { LlmResponse, LlmService } from "../domain/ports/llm-service";
+import type {
+  LlmResponse,
+  LlmService,
+} from "../../../domain/ports/llm-service";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,

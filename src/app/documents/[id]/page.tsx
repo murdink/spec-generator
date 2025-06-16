@@ -46,22 +46,26 @@ export default function DocumentPage() {
       <div className="col-span-1">
         <div className="flex h-full flex-col rounded-lg bg-gray-100 p-4">
           <div className="flex-grow">
-            {document.conversation?.messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`mb-4 ${msg.sender === "user" ? "text-right" : ""}`}
-              >
+            {document.conversation?.messages.map(
+              (msg: { id: number; sender: string; text: string }) => (
                 <div
-                  className={`inline-block rounded-lg px-4 py-2 ${
-                    msg.sender === "user"
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-300"
+                  key={msg.id}
+                  className={`mb-4 ${
+                    msg.sender === "user" ? "text-right" : ""
                   }`}
                 >
-                  {msg.text}
+                  <div
+                    className={`inline-block rounded-lg px-4 py-2 ${
+                      msg.sender === "user"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-300"
+                    }`}
+                  >
+                    {msg.text}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
           <div className="mt-4 flex">
             <input

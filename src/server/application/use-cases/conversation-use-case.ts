@@ -1,10 +1,10 @@
-import type { ConversationRepository } from "../ports/conversation-repository";
-import type { LlmService } from "../ports/llm-service";
+import type { ConversationRepository } from "../../domain/ports/conversation-repository";
+import type { LlmService } from "../../domain/ports/llm-service";
 
 export class ConversationUseCase {
   constructor(
     private readonly llmService: LlmService,
-    private readonly conversationRepository: ConversationRepository,
+    private readonly conversationRepository: ConversationRepository
   ) {}
 
   public async sendMessage(conversationId: number, text: string) {
@@ -14,12 +14,13 @@ export class ConversationUseCase {
       sender: "user",
     });
 
-    const conversation =
-      await this.conversationRepository.findConversationById(conversationId);
+    const conversation = await this.conversationRepository.findConversationById(
+      conversationId
+    );
 
     if (conversation) {
       const llmResponse = await this.llmService.getResponse(
-        conversation.messages,
+        conversation.messages
       );
 
       if (llmResponse.clarifying_question) {
@@ -33,7 +34,7 @@ export class ConversationUseCase {
       if (llmResponse.updated_spec_document) {
         await this.conversationRepository.updateDocument(
           conversation.documentId,
-          llmResponse.updated_spec_document,
+          llmResponse.updated_spec_document
         );
       }
     }

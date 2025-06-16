@@ -1,5 +1,5 @@
-import { conversationRouter } from "@/server/api/routers/conversation";
-import { documentRouter } from "@/server/api/routers/document";
+import { conversationRouter } from "@/server/adapters/driving/api/routers/conversation";
+import { documentRouter } from "@/server/adapters/driving/api/routers/document";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 
 /**
