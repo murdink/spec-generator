@@ -1,25 +1,21 @@
-import { type PrismaClient } from "@prisma/client";
+import { type ConversationRepository } from "../ports/conversation-repository";
 import { type LlmService } from "../ports/llm-service";
 
 export class ConversationUseCase {
   constructor(
     private readonly llmService: LlmService,
-    private readonly db: PrismaClient,
+    private readonly conversationRepository: ConversationRepository,
   ) {}
 
   public async sendMessage(conversationId: number, text: string) {
-    await this.db.message.create({
-      data: {
-        conversationId,
-        text,
-        sender: "user",
-      },
+    await this.conversationRepository.addMessage({
+      conversationId,
+      text,
+      sender: "user",
     });
 
-    const conversation = await this.db.conversation.findUnique({
-      where: { id: conversationId },
-      include: { messages: true },
-    });
+    const conversation =
+      await this.conversationRepository.findConversationById(conversationId);
 
     if (conversation) {
       const llmResponse = await this.llmService.getResponse(
@@ -27,20 +23,18 @@ export class ConversationUseCase {
       );
 
       if (llmResponse.clarifying_question) {
-        await this.db.message.create({
-          data: {
-            conversationId,
-            text: llmResponse.clarifying_question,
-            sender: "llm",
-          },
+        await this.conversationRepository.addMessage({
+          conversationId,
+          text: llmResponse.clarifying_question,
+          sender: "llm",
         });
       }
 
       if (llmResponse.updated_spec_document) {
-        await this.db.document.update({
-          where: { id: conversation.documentId },
-          data: { content: llmResponse.updated_spec_document },
-        });
+        await this.conversationRepository.updateDocument(
+          conversation.documentId,
+          llmResponse.updated_spec_document,
+        );
       }
     }
   }

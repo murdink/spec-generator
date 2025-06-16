@@ -1,3 +1,4 @@
+import { PrismaConversationRepository } from "@/server/adapters/prisma-conversation-repository";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { createLlmService } from "@/server/domain/factories/llm-service-factory";
 import { ConversationUseCase } from "@/server/domain/use-cases/conversation-use-case";
@@ -14,7 +15,7 @@ export const conversationRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const useCase = new ConversationUseCase(
         createLlmService(),
-        ctx.db,
+        new PrismaConversationRepository(ctx.db),
       );
       await useCase.sendMessage(input.conversationId, input.text);
     }),
