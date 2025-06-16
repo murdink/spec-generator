@@ -1,5 +1,5 @@
-import { conversationUseCase } from "@/server/adapters/dependency-injection";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { conversationUseCase } from "@/server/composition";
 import { z } from "zod";
 
 export const conversationRouter = createTRPCRouter({
