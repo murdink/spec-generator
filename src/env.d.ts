@@ -5,3 +5,5 @@ declare namespace NodeJS {
     LLM_ADAPTER?: "openai" | "fake";
   }
 }
+
+export {};
