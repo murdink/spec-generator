@@ -172,7 +172,7 @@ export function ChatInterface({ documentId }: { documentId: number }) {
 
       {/* Input Area */}
       <div className="border-gray-100 border-t p-4">
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <Input
             ref={inputRef}
             value={inputValue}
