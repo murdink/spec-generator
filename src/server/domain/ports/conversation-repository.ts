@@ -8,4 +8,5 @@ export interface ConversationRepository {
     sender: "user" | "llm";
   }): Promise<void>;
   updateDocument(documentId: number, content: string): Promise<void>;
+  create(document: { title: string; content: string }): Promise<{ id: number }>;
 }

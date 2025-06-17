@@ -52,4 +52,18 @@ export class PrismaConversationRepository implements ConversationRepository {
       data: { content },
     });
   }
+  public async create(document: {
+    title: string;
+    content: string;
+  }): Promise<{ id: number }> {
+    const newDocument = await this.db.document.create({
+      data: {
+        ...document,
+        conversation: {
+          create: {},
+        },
+      },
+    });
+    return { id: newDocument.id };
+  }
 }
